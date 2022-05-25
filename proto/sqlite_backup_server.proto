@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package proto;
+
+option go_package = "github.com/t4ke0/sqlite_backup_server/proto";
+
+
+// BackupService
+service BackupService {
+    rpc Upload(stream UploadRequest) returns (UploadResponse){};
+    rpc Download(DownloadRequest) returns (stream DownloadResponse){};
+}
+
+// UploadRequest
+message UploadRequest {
+    string FileName = 1;
+    bytes Chunk = 2;
+}
+
+// UploadResponse
+message UploadResponse {
+    bool Ok = 1;
+}
+
+// DownloadRequest
+message DownloadRequest {
+    string FileName = 1;
+}
+
+// DownloadResponse
+message DownloadResponse {
+    bytes Chunk = 1;
+}
