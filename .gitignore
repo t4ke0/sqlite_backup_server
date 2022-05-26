@@ -2,3 +2,5 @@
 *.key
 *.crt
 uploader/
+server
+media/
