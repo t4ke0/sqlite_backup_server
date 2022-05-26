@@ -75,7 +75,7 @@ func (b *BackupServer) Download(req *pb.DownloadRequest, stream pb.BackupService
 	}
 	defer fd.Close()
 
-	const chunkSize = 512
+	const chunkSize = 1024
 
 	chunk := make([]byte, chunkSize)
 
