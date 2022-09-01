@@ -2,6 +2,8 @@ package main
 
 import (
 	"bufio"
+	"crypto/tls"
+	_ "embed"
 	"fmt"
 	"io"
 	"log"
@@ -16,8 +18,10 @@ import (
 )
 
 var (
-	tlsKeyFile  string = os.Getenv("TLS_KEY")
-	tlsCertFile string = os.Getenv("TLS_CERT")
+	//go:embed tls.key
+	tlsKeyFile string
+	//go:embed tls.crt
+	tlsCertFile string
 	//
 	serverPort string = os.Getenv("SERVER_PORT")
 )
@@ -105,10 +109,12 @@ func main() {
 		log.Fatalf("Error failed to listen on %v [%v]", serverPort, err)
 	}
 
-	creds, err := credentials.NewServerTLSFromFile(tlsCertFile, tlsKeyFile)
+	cert, err := tls.X509KeyPair([]byte(tlsCertFile), []byte(tlsKeyFile))
 	if err != nil {
-		log.Fatalf("Error failed to get tls creds %v", err)
+		log.Fatal(err)
 	}
+
+	creds := credentials.NewServerTLSFromCert(&cert)
 
 	opts := []grpc.ServerOption{grpc.Creds(creds)}
 	grpcServer := grpc.NewServer(opts...)
