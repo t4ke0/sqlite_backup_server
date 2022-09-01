@@ -1,6 +1,4 @@
 *.sh
-*.key
-*.crt
 uploader/
 server
 media/
